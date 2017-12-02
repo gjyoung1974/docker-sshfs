@@ -1,0 +1,84 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: some-web-app
+  namespace: mywebapp
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: {{ app_domain_ssl_cert }}
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+    dns.alpha.kubernetes.io/external: mywebapp-repo.{{ app_domain }}
+spec:
+  selector:
+    app: some-web-app
+  ports:
+    - protocol: "TCP"
+      port: 443
+      targetPort: 80
+  type: LoadBalancer
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: webapp-sshfs
+  namespace: mywebapp
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "2022"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
+    dns.alpha.kubernetes.io/external: mywebapp-sshfs.{{ app_domain }}
+spec:
+  selector:
+    app: some-web-app
+  ports:
+    - protocol: "TCP"
+      port: 2022
+      targetPort: 22
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: some-web-app
+  namespace: mywebapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: some-web-app
+      labels:
+        app: some-web-app
+    spec:
+      containers:
+        - image: "nginx:latest"
+          name: some-web-app
+          ports:
+            - containerPort: 80
+          volumeMounts:
+          - name: webapp-repo
+            mountPath: /etc/nginx/html/web_app_files
+        - image: "gjyoung1974/alpine-sshd"
+          name: webapp-sshfs
+          env:
+            - name: ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mywebapp-secrets
+                  key: webapp-repo-sshfs-pass
+            - name: ROOT_AUTHORIZED_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mywebapp-secrets
+                  key: webapp-repo-sshfs-authorized-key
+          ports:
+            - containerPort: 22
+          volumeMounts:
+          - name: webapp-repo
+            mountPath: /web_app_files
+      volumes:
+        -
+          name: webapp-repo
+          persistentVolumeClaim:
+            claimName: webapp-repo-pv
+---
+
