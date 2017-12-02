@@ -14,8 +14,9 @@ Use this Dockerfile / -image to start a sshd-server upon a lightweight Alpine co
 $ docker run --rm \
 --publish=1234:22 \
 --env ROOT_PASSWORD=MyRootPW123 \
---env ROOT_AUTHORIZED_KEY="<some public key base64 string>" \
-hermsi/alpine-sshd
+# or use an RSA key
+# --env ROOT_AUTHORIZED_KEY="<some public key base64 string>" \
+gjyoung1974/alpine-sshd
 ```
 
 After the container is up you are able to ssh in it as root with the in --env provided password  or RSA keypair for "root"-user.
@@ -35,3 +36,4 @@ sshfs root@<some_remote_server>:/remote_path ~/local_path/ -o auto_cache,reconne
 ```
 2017 Gordon young gjyoung1974@gmail.com
 ```
+
