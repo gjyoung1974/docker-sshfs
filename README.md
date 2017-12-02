@@ -1,5 +1,5 @@
 ## A docker container to serve a Kubernetes Persistent Volume over SSH
-### Usecase: remotely mount a Persistent Volume via Fuse SSHFS for purposes of remote repository management
+### Usecase: remotely mount a Persistent Volume via Fuse SSHFS
 
 ### Overview
 Use this Dockerfile / -image to start a sshd-server upon a lightweight Alpine container.
