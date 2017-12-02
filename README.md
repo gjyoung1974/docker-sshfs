@@ -1,4 +1,4 @@
-## A docker container to offer a Kubernetes Persistent Volume over SSH
+## A docker container to serve a Kubernetes Persistent Volume over SSH
 ### Usecase: remotely mount a Persistent Volume via Fuse SSHFS for purposes of remote repository management
 
 ### Overview
