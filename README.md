@@ -28,7 +28,7 @@ https://github.com/osxfuse/osxfuse/wiki/SSHFS
 
 ```
 function remote_fs(){
-sshfs root@<some_remote_server>:/remote_path ~/local_path/ -o auto_cache,reconnect,defer_permissions,noappledouble,IdentityFile=~/.ssh/id_rsa -p 1234 
+sshfs root@<some_remote_server>:/web_app_files ~/web_app_files/ -o auto_cache,reconnect,defer_permissions,noappledouble,IdentityFile=~/.ssh/id_rsa -p 1234 
 }
 ```
 
