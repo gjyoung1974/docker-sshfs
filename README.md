@@ -18,10 +18,19 @@ $ docker run --rm \
 hermsi/alpine-sshd
 ```
 
-After the container is up you are able to ssh in it as root with the in --env provided password for "root"-user.
+After the container is up you are able to ssh in it as root with the in --env provided password  or RSA keypair for "root"-user.
 ```
 $ ssh root@mydomain.tld -p 1234
 ```
+mount the remote filesystem locally with fuse:
+https://github.com/osxfuse/osxfuse/wiki/SSHFS
+
+```
+function remote_fs(){
+sshfs root@<some_remote_server>:/remote_path ~/local_path/ -o auto_cache,reconnect,defer_permissions,noappledouble,IdentityFile=~/.ssh/id_rsa -p 1234 
+}
+```
+
 
 ```
 2017 Gordon young gjyoung1974@gmail.com
