@@ -19,7 +19,7 @@ spec:
             - containerPort: 80 
           volumeMounts:
           - name: webapp-repo
-            mountPath: /etc/nginx/html/web_app_files
+            mountPath: /usr/local/apache2/htdocs 
         - image: "gjyoung1974/alpine-sshd"
           name: webapp-sshfs
           env:
@@ -35,6 +35,9 @@ spec:
                   key: my-webapp-sshfs-authorized-key 
           ports:
             - containerPort: 22
+          volumeMounts:
+          - name: webapp-repo
+            mountPath: /web_app_files
       volumes:
         -
           name: webapp-repo
