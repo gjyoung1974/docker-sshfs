@@ -50,26 +50,26 @@ spec:
         app: some-web-app
     spec:
       containers:
-        - image: "nginx:latest"
+        - image: "httpd:latest"
           name: some-web-app
           ports:
-            - containerPort: 80
+            - containerPort: 80 
           volumeMounts:
           - name: webapp-repo
-            mountPath: /etc/nginx/html/web_app_files
+            mountPath: /usr/local/apache2/htdocs 
         - image: "gjyoung1974/alpine-sshd"
           name: webapp-sshfs
           env:
             - name: ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mywebapp-secrets
-                  key: webapp-repo-sshfs-pass
-            - name: ROOT_AUTHORIZED_KEY
+                  name: mywebapp-secrets 
+                  key: mywebapp-sshfs-pass
+            - name: ROOT_AUTHORIZED_KEY 
               valueFrom:
                 secretKeyRef:
                   name: mywebapp-secrets
-                  key: webapp-repo-sshfs-authorized-key
+                  key: my-webapp-sshfs-authorized-key 
           ports:
             - containerPort: 22
           volumeMounts:
@@ -79,6 +79,6 @@ spec:
         -
           name: webapp-repo
           persistentVolumeClaim:
-            claimName: webapp-repo-pv
+            claimName: webapp-repo-pvc
 ---
 
