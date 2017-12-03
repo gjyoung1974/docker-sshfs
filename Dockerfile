@@ -7,10 +7,10 @@ ENV ROOT_AUTHORIZED_KEY root_key
 
 RUN apk --update add openssh \
 		&& sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
-		&& echo "root:${ROOT_PASSWORD:-word}" | chpasswd \
+		&& echo "root:${ROOT_PASSWORD}" | chpasswd \
 		&& rm -rf /var/cache/apk/* /tmp/* \ 
 		&& mkdir /root/.ssh/ && chmod 700 /root/.ssh \
-		&& echo "${ROOT_AUTHORIZED_KEY:-word}" > /root/.ssh/authorized_keys \
+		&& echo "${ROOT_AUTHORIZED_KEY}"  | cat > /root/.ssh/authorized_keys \
 		&& chmod 600 /root/.ssh/authorized_keys
 
 COPY entrypoint.sh /usr/local/bin/
