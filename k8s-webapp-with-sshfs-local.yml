@@ -1,0 +1,97 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: some-web-app
+  namespace: mywebapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: some-web-app
+      labels:
+        app: some-web-app
+    spec:
+      containers:
+        - image: "httpd:latest"
+          name: some-web-app
+          ports:
+            - containerPort: 80 
+          volumeMounts:
+          - name: webapp-repo
+            mountPath: /etc/nginx/html/web_app_files
+        - image: "gjyoung1974/alpine-sshd"
+          name: webapp-sshfs
+          env:
+            - name: ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mywebapp-secrets 
+                  key: mywebapp-sshfs-pass
+            - name: ROOT_AUTHORIZED_KEY 
+              valueFrom:
+                secretKeyRef:
+                  name: mywebapp-secrets
+                  key: my-webapp-sshfs-authorized-key 
+          ports:
+            - containerPort: 22
+      volumes:
+        -
+          name: webapp-repo
+          persistentVolumeClaim:
+            claimName: webapp-repo-pvc
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: webapp-repo
+  namespace: mywebapp 
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/data"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: webapp-repo-pvc 
+  namespace: mywebapp
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3G
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: some-web-app 
+  name: some-web-app-svc 
+  namespace: mywebapp 
+spec:
+  ports:
+  - name: web
+    nodePort: 32076
+    port: 80 
+    protocol: TCP
+    targetPort: 80
+  - name: sshfs 
+    nodePort: 32077
+    port: 22
+    protocol: TCP
+    targetPort: 22
+  selector:
+    app: some-web-app 
+  sessionAffinity: None
+  type: NodePort
+---
+
