@@ -1,5 +1,5 @@
 ## A docker container to serve a Kubernetes Persistent Volume over SSH
-### Usecase: remotely mount a Persistent Volume via Fuse SSHFS for purposes of remote repository management
+### Usecase: remotely mount a Persistent Volume via Fuse SSHFS
 
 ### Overview
 Use this Dockerfile / -image to start a sshd-server upon a lightweight Alpine container.
@@ -9,7 +9,7 @@ Use this Dockerfile / -image to start a sshd-server upon a lightweight Alpine co
 * Password of "root"-user can be changed when starting the container using --env
 * Public SSH key of "root"-user can be changed when starting the container using --env
 
-### Basic Usage
+### Basic Docker Usage
 ```
 $ docker run --rm \
 --publish=1234:22 \
@@ -18,6 +18,8 @@ $ docker run --rm \
 # --env ROOT_AUTHORIZED_KEY="<some public key base64 string>" \
 gjyoung1974/alpine-sshd
 ```
+### Basic Kubernetes Usage
+See the file: k8s-webapp-with-sshfs.yml
 
 After the container is up you are able to ssh in it as root with the in --env provided password  or RSA keypair for "root"-user.
 ```

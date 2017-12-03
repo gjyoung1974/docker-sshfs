@@ -8,7 +8,7 @@ metadata:
     service.beta.kubernetes.io/aws-load-balancer-ssl-cert: {{ app_domain_ssl_cert }}
     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
-    dns.alpha.kubernetes.io/external: mywebapp-repo.{{ app_domain }}
+    dns.alpha.kubernetes.io/external: mywebapp.example.com
 spec:
   selector:
     app: some-web-app
@@ -26,7 +26,7 @@ metadata:
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "2022"
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
-    dns.alpha.kubernetes.io/external: mywebapp-sshfs.{{ app_domain }}
+    dns.alpha.kubernetes.io/external: mywebapp-sshfs.example.com
 spec:
   selector:
     app: some-web-app
