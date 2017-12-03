@@ -1,4 +1,4 @@
-## A docker container to serve a Kubernetes Persistent Volume over SSH
+## docker-sshfs: serve a Kubernetes persistent volume over SSH
 ### Usecase: remotely mount a Persistent Volume via Fuse SSHFS
 
 ### Overview
@@ -33,6 +33,8 @@ function remote_fs(){
 sshfs root@<some_remote_server>:/web_app_files ~/web_app_files/ -o auto_cache,reconnect,defer_permissions,noappledouble,IdentityFile=~/.ssh/id_rsa -p 1234 
 }
 ```
+//TODO 
+Harden SSHD config
 
 
 ```
